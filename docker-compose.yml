@@ -1,0 +1,30 @@
+services:
+  cv-generator:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: angular-cv-generator
+    ports:
+      - "4000:80"
+    restart: unless-stopped
+    environment:
+      - NODE_ENV=production
+
+  cv-generator-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: development
+    container_name: angular-cv-generator-dev
+    ports:
+      - "4200:4200"
+    volumes:
+      - .:/app
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
+    profiles:
+      - dev
+
+volumes:
+  node_modules:

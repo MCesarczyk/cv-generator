@@ -1,0 +1,38 @@
+services:
+  cv-generator:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: angular-cv-generator-prod
+    ports:
+      - "80:80"
+    restart: always
+    environment:
+      - NODE_ENV=production
+    networks:
+      - cv-network
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:80"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  nginx-proxy:
+    image: nginx:alpine
+    container_name: cv-generator-proxy
+    ports:
+      - "443:443"
+    volumes:
+      - ./nginx-ssl.conf:/etc/nginx/nginx.conf:ro
+      - ./ssl:/etc/nginx/ssl:ro
+    depends_on:
+      - cv-generator
+    networks:
+      - cv-network
+    profiles:
+      - ssl
+
+networks:
+  cv-network:
+    driver: bridge
