@@ -1,6 +1,5 @@
 {
-  "name": "angular-cv-generator",
-  "private": true,
+  "name": "client",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
