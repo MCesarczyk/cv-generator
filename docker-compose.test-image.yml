@@ -1,6 +1,6 @@
 services:
   cv-generator-test-image:
-    image: ghcr.io/mcesarczyk/cv-generator:latest
+    image: ghcr.io/mcesarczyk/cv-generator-client:latest
     container_name: angular-cv-generator-test-image
     ports:
       - "4400:80"
