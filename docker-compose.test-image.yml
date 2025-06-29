@@ -1,0 +1,9 @@
+services:
+  cv-generator-test-image:
+    image: ghcr.io/mcesarczyk/cv-generator:latest
+    container_name: angular-cv-generator-test-image
+    ports:
+      - "4400:80"
+    restart: unless-stopped
+    environment:
+      - NODE_ENV=production

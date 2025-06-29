@@ -12,6 +12,7 @@ This document explains how to run the Angular CV Generator using Docker and Dock
 ### Production Build
 
 1. **Build and run the production container:**
+
    ```bash
    docker-compose up -d
    ```
@@ -22,6 +23,7 @@ This document explains how to run the Angular CV Generator using Docker and Dock
 ### Development Mode
 
 1. **Run in development mode with hot reload:**
+
    ```bash
    docker-compose --profile dev up cv-generator-dev
    ```
@@ -85,6 +87,7 @@ docker system prune -a
 ## Container Details
 
 ### Production Container
+
 - **Base Image:** nginx:1.29.0-alpine3.22
 - **Port:** 4000 (mapped to container port 80)
 - **Package Manager:** pnpm (faster installs and better caching)
@@ -96,6 +99,7 @@ docker system prune -a
   - Static asset caching
 
 ### Development Container
+
 - **Base Image:** node:22.17.0-alpine3.21
 - **Port:** 4200
 - **Package Manager:** pnpm
@@ -130,6 +134,7 @@ PORT=4000
 To enable HTTPS in production:
 
 1. **Place SSL certificates in the `ssl/` directory:**
+
    ```
    ssl/
    ├── certificate.crt
@@ -146,6 +151,7 @@ To enable HTTPS in production:
 ### Common Issues
 
 1. **Port already in use:**
+
    ```bash
    # Change the port in docker-compose.yml
    ports:
@@ -153,21 +159,24 @@ To enable HTTPS in production:
    ```
 
 2. **Permission issues:**
+
    ```bash
    # Fix file permissions
    sudo chown -R $USER:$USER .
    ```
 
 3. **Container won't start:**
+
    ```bash
    # Check logs
    docker-compose logs cv-generator
-   
+
    # Rebuild container
    docker-compose up --build
    ```
 
 4. **Development hot reload not working:**
+
    ```bash
    # Ensure volume mounting is correct
    docker-compose --profile dev up cv-generator-dev --build
@@ -183,6 +192,7 @@ To enable HTTPS in production:
 ## Performance Optimization
 
 ### Production Optimizations
+
 - Multi-stage Docker build reduces image size
 - pnpm provides faster dependency installation
 - Nginx serves static files efficiently
@@ -190,6 +200,7 @@ To enable HTTPS in production:
 - Browser caching improves load times
 
 ### Development Optimizations
+
 - pnpm's efficient caching speeds up rebuilds
 - Volume mounting enables hot reload
 - Polling ensures file changes are detected
@@ -206,13 +217,16 @@ To enable HTTPS in production:
 ## Monitoring
 
 ### Health Checks
+
 The production container includes health checks:
+
 ```bash
 # Check container health
 docker-compose ps
 ```
 
 ### Logs
+
 ```bash
 # View application logs
 docker-compose logs -f cv-generator
@@ -223,16 +237,11 @@ docker-compose exec cv-generator tail -f /var/log/nginx/access.log
 
 ## CI/CD Integration
 
-The included GitHub Actions workflow uses pnpm for faster CI builds:
+The included GitHub Actions workflow validate PR title and content for conventional-commit formatting, ensuring consistent commit messages.
 
-```yaml
-- name: Install pnpm
-  uses: pnpm/action-setup@v2
-  with:
-    version: 8
+Additionally, after building, the image is tagged with the commit SHA and pushed to the registry.
+You can test the image locally using the provided `docker-compose.test-image.yml` file.
 
-- name: Install dependencies
-  run: pnpm install --frozen-lockfile
 ```
-
-This ensures consistent builds across development and production environments.
+docker compose -f docker-compose.test-image.yml up -d
+```
