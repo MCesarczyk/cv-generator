@@ -1,7 +1,7 @@
 services:
   cv-generator:
     build:
-      context: .
+      context: ./apps/client
       dockerfile: Dockerfile
     container_name: angular-cv-generator
     ports:
@@ -12,7 +12,7 @@ services:
 
   cv-generator-dev:
     build:
-      context: .
+      context: ./apps/client
       dockerfile: Dockerfile
       target: development
     container_name: angular-cv-generator-dev
